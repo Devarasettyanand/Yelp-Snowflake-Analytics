@@ -47,8 +47,5 @@ The project successfully generated several key insights, including:
 2.  **Clone the Repository**: `git clone https://github.com/your-username/Yelp-Snowflake-Analytics.git`
 3.  **Execute SQL Scripts**: Run the SQL files in the `sql/` directory in the following order:
     * `01_data_ingestion.sql`
-    * `02_data_transformation.sql`
-    * `03_sentiment_analysis_udf.sql`
-    * `04_analytical_queries.sql`
-
-*Note: The AWS S3 bucket and credentials in the ingestion script are for demonstration purposes and would need to be replaced with your own credentials and data source if you wish to run the project.*
+    * `02_sentiment_analysis_udf.sql`
+    * `03_analytical_queries.sql`
