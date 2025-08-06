@@ -1,0 +1,41 @@
+CREATE OR REPLACE FUNCTION analyze_sentiment(text STRING)
+RETURNS STRING
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.9'
+PACKAGES = ('textblob')
+HANDLER = 'sentiment_analyzer'
+AS
+$$
+from textblob import TextBlob
+
+def sentiment_analyzer(text):
+    analysis = TextBlob(text)
+    polarity = analysis.sentiment.polarity
+    if polarity > 0:
+        return 'positive'
+    elif polarity == 0:
+        return 'neutral'
+    else:
+        return 'negative'
+$$;
+
+
+create or replace table tbl_yelp_reviews as 
+select REVIEW_TEXT:business_id::string as business_id ,
+       REVIEW_TEXT:user_id::string as user_id ,
+       REVIEW_TEXT:date::date as review_date , 
+       REVIEW_TEXT:stars::number as review_star , 
+       REVIEW_TEXT:text::string as reviews , 
+       analyze_sentiment(reviews) as sentient ,
+from yelp_review ;
+
+select * from tbl_yelp_reviews limit 10  ;
+
+create table tbl_yelp_business as 
+select BUSINESS_TEXT:business_id::string as business_id ,
+       BUSINESS_TEXT:city::string as city ,
+       BUSINESS_TEXT:state::string as state ,
+       BUSINESS_TEXT:review_count::number as review_count ,
+       BUSINESS_TEXT:stars::number as stars ,
+       BUSINESS_TEXT:categories::string as categories ,
+from yelp_business;
